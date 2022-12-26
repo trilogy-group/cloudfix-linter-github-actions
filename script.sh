@@ -6,12 +6,12 @@ terraform_validate=$(terraform validate -no-color)
 echo "Terraform Validate\n${terraform_validate}"
 
 terraform_show=$(terraform show -json | head -2 | tail -1 > tf.show)
-echo "Terraform Validate\n${terraform_show}"
+echo "Terraform Show\n${terraform_show}"
 
 mock_recco=$(python gen_recco.py tf.show)
 echo "Generate Mock Reccomendations\n${mock_recco}"
 
-install=$(bash install.sh)
+install=$(bash installScript.sh)
 echo "Installing tflint and cloudfix-linter\n${install}"
 
 linter_init=$(./cloudfix-linter/cloudfix-linter init)
