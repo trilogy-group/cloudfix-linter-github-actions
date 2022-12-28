@@ -33,11 +33,11 @@ fi
 
 install=$(bash installScript.sh)
 status=$?
-echo "Installing tflint and cloudfix-linter\n${install}"
 if [ $status != 0 ] 
 then
     exit 1
 fi
+echo "Installingg tflint and cloudfix-linter\n"
 
 linter_init=$(./cloudfix-linter/cloudfix-linter init)
 status=$?
