@@ -1,4 +1,5 @@
 #!/bin/bash
+pwd
 terraform_init=$(terraform init)
 status=$?
 echo "Terraform Init\n${terraform_init}"
