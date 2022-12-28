@@ -17,7 +17,7 @@ fi
 
 terraform_show=$(terraform show -json | head -2 | tail -1 > tf.show)
 status=$?
-echo "Terraform Show\n${terraform_show}"
+echo "Terraform Show\n"
 if [ $status != 0 ] 
 then
     exit 1
