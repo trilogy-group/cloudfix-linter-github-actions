@@ -20,6 +20,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       
       - name: Comment Reccomendation
+        if: github.event_name == 'pull_request'
         id: prcomment
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
