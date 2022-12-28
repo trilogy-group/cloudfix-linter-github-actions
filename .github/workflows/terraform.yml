@@ -7,8 +7,7 @@ jobs:
   terraform:
     name: "Cloudfix-Linter"
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,12 +20,6 @@ jobs:
       
       - name: Comment Reccomendation
         id: prcomment
-        if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: export pr_number=${{ github.event.pull_request.number }}; export repository=${{ github.repository }}; sh script.sh
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
-
