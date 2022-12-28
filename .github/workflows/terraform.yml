@@ -18,10 +18,39 @@ jobs:
         with:
           # terraform_version: 0.13.0:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+      
+      - name: Terraform Show
+        if: github.event_name == 'pull_request'
+        run: terraform show -json | head -2 | tail -1 > tf.show
+
+      - name: Generate Mock reccomendations
+        if: github.event_name == 'pull_request'
+        run: python gen_recco.py tf.show
+
+      - name: Installing tflint and cloudfix-linter
+        if: github.event_name == 'pull_request'
+        run: bash installScript.sh
+
+      - name: Cloudfix-Linter Init
+        id: linterinit
+        if: github.event_name == 'pull_request'
+        run: ./cloudfix-linter/cloudfix-linter init
       
       - name: Comment Reccomendation
-        if: github.event_name == 'pull_request'
         id: prcomment
+        if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: export pr_number=${{ github.event.pull_request.number }}; export repository=${{ github.repository }}; sh script.sh
+        run: export pr_number=${{ github.event.pull_request.number }}; sh script.sh
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
